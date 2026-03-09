@@ -17,6 +17,7 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const signUp = useAuthStore((s) => s.signUp);
 
@@ -43,6 +44,8 @@ export default function RegisterScreen() {
 
     if (signUpError) {
       setError(signUpError);
+    } else {
+      setSuccess(true);
     }
   };
 
@@ -53,83 +56,110 @@ export default function RegisterScreen() {
         className="flex-1"
       >
         <View className="flex-1 px-6 justify-center">
-          <Text className="text-3xl font-bold text-gray-900 mb-1">
-            Create Account
-          </Text>
-          <Text className="text-base text-gray-500 mb-8">
-            Start your learning journey
-          </Text>
+          {success ? (
+            <>
+              <View className="bg-green-50 rounded-2xl p-6 mb-6">
+                <Text className="text-xl font-bold text-green-800 mb-2">
+                  Check your email!
+                </Text>
+                <Text className="text-sm text-green-700 leading-5">
+                  We sent a confirmation link to{" "}
+                  <Text className="font-semibold">{email}</Text>. Please check
+                  your inbox and confirm your email to get started.
+                </Text>
+              </View>
 
-          {error && (
-            <View className="bg-red-50 rounded-xl p-3 mb-4">
-              <Text className="text-red-600 text-sm">{error}</Text>
-            </View>
-          )}
-
-          <Text className="text-sm font-medium text-gray-700 mb-1">Email</Text>
-          <TextInput
-            className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-base text-gray-900 mb-4"
-            placeholder="you@example.com"
-            placeholderTextColor="#9ca3af"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            autoComplete="email"
-          />
-
-          <Text className="text-sm font-medium text-gray-700 mb-1">
-            Password
-          </Text>
-          <TextInput
-            className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-base text-gray-900 mb-4"
-            placeholder="At least 6 characters"
-            placeholderTextColor="#9ca3af"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            autoComplete="new-password"
-          />
-
-          <Text className="text-sm font-medium text-gray-700 mb-1">
-            Confirm Password
-          </Text>
-          <TextInput
-            className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-base text-gray-900 mb-6"
-            placeholder="Confirm your password"
-            placeholderTextColor="#9ca3af"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry
-            autoComplete="new-password"
-          />
-
-          <Pressable
-            className="bg-primary-600 rounded-xl py-4 items-center active:bg-primary-700"
-            onPress={handleRegister}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text className="text-white font-semibold text-base">
+              <Link href="/(auth)/login" asChild>
+                <Pressable className="bg-primary-600 rounded-xl py-4 items-center active:bg-primary-700">
+                  <Text className="text-white font-semibold text-base">
+                    Go to Sign In
+                  </Text>
+                </Pressable>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Text className="text-3xl font-bold text-gray-900 mb-1">
                 Create Account
               </Text>
-            )}
-          </Pressable>
+              <Text className="text-base text-gray-500 mb-8">
+                Start your learning journey
+              </Text>
 
-          <View className="flex-row justify-center mt-6">
-            <Text className="text-gray-500 text-sm">
-              Already have an account?{" "}
-            </Text>
-            <Link href="/(auth)/login" asChild>
-              <Pressable>
-                <Text className="text-primary-600 font-semibold text-sm">
-                  Sign In
-                </Text>
+              {error && (
+                <View className="bg-red-50 rounded-xl p-3 mb-4">
+                  <Text className="text-red-600 text-sm">{error}</Text>
+                </View>
+              )}
+
+              <Text className="text-sm font-medium text-gray-700 mb-1">
+                Email
+              </Text>
+              <TextInput
+                className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-base text-gray-900 mb-4"
+                placeholder="you@example.com"
+                placeholderTextColor="#9ca3af"
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                autoComplete="email"
+              />
+
+              <Text className="text-sm font-medium text-gray-700 mb-1">
+                Password
+              </Text>
+              <TextInput
+                className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-base text-gray-900 mb-4"
+                placeholder="At least 6 characters"
+                placeholderTextColor="#9ca3af"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                autoComplete="new-password"
+              />
+
+              <Text className="text-sm font-medium text-gray-700 mb-1">
+                Confirm Password
+              </Text>
+              <TextInput
+                className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-base text-gray-900 mb-6"
+                placeholder="Confirm your password"
+                placeholderTextColor="#9ca3af"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry
+                autoComplete="new-password"
+              />
+
+              <Pressable
+                className="bg-primary-600 rounded-xl py-4 items-center active:bg-primary-700"
+                onPress={handleRegister}
+                disabled={loading}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text className="text-white font-semibold text-base">
+                    Create Account
+                  </Text>
+                )}
               </Pressable>
-            </Link>
-          </View>
+
+              <View className="flex-row justify-center mt-6">
+                <Text className="text-gray-500 text-sm">
+                  Already have an account?{" "}
+                </Text>
+                <Link href="/(auth)/login" asChild>
+                  <Pressable>
+                    <Text className="text-primary-600 font-semibold text-sm">
+                      Sign In
+                    </Text>
+                  </Pressable>
+                </Link>
+              </View>
+            </>
+          )}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
